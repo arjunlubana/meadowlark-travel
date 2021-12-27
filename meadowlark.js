@@ -1,6 +1,9 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import { dirname } from "path";
+import getFortune from "./lib/fortune.js";
+
+
 const app = express();
 
 app.set("port", process.env.PORT || 3000);
@@ -8,22 +11,13 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 app.use(express.static(dirname(".") + "/public"));
-var fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need springs.",
-  "Do not fear what you don't know.",
-  "You will have a pleasant surprise.",
-  "Whenever possible, keep it simple.",
-  ];
 
 app.get("/", (req, res) => {
   res.render("home");
 });
 
 app.get("/about", (req, res) => {
-  let randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)]
-
-  res.render("about", {fortune: randomFortune});
+  res.render("about", {fortune: getFortune()});
 });
 
 // Custom 404 Page

@@ -12,16 +12,16 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 
 // Middleware
+app.use(function (req, res, next) {
+  if (!res.locals.partials) res.locals.partials = {};
+  res.locals.partials.weather = getWeatherData();
+  next();
+});
 
 app.use(express.static(dirname(".") + "/public"));
 app.use(function (req, res, next) {
   res.locals.showTests =
     app.get("env") !== "production" && req.query.test === "1";
-  next();
-});
-app.use(function (req, res, next) {
-  if (!res.locals.partials) res.locals.partials = {};
-  res.locals.partials.weather = getWeatherData();
   next();
 });
 
